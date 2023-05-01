@@ -11,12 +11,14 @@ class QueueService( @Autowired private val redisMessageService: RedisMessageServ
 
 
     fun getAllQueues(group_id: Long):String{
+        println("1")
         val queuesJson:String = redisMessageService.publishAndPop(
             "md-user-request",
             String.format("""{json{"command": "findAllByGroupId","payload":{"group_id":%s}}}""" , group_id),
             "md-user-response",
             Duration.ofSeconds(10)
         ) ?: "Message sent, but no response received yet. :("
+        println("2")
         return queuesJson;
     }
 
