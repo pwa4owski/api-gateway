@@ -43,9 +43,9 @@ class ExampleController @Autowired constructor(
 //    fun deleteQueue(@PathVariable group_id: Long, @PathVariable queues_id: Long) {
 //        return gavno
 //    }
-    @GetMapping("/api/groups/{group_id}/queues")
-    fun getQueues(@PathVariable group_id: Long): String {
-        println(queueService.getAllQueues(group_id))
+    @PostMapping("/api/groups/{group_id}/queues")
+    fun getQueues(@PathVariable("group_id") groupId: Long): String {
+        println(queueService.getAllQueues(groupId))
         return "asdas";
     }
 }
