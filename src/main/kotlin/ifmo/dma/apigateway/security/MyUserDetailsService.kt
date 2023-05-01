@@ -28,7 +28,7 @@ class MyUserDetailsService(redisMessageService: RedisMessageService) : UserDetai
     override fun loadUserByUsername(username: String): UserDetails {
         val userJson:String = redisMessageService.publishAndPop(
             "md-user-request",
-            String.format("""{"command":"findUserByLogin","""+""""payload":{"login":"%s"}}""" , username),
+            String.format("""{"command":"login","""+""""payload":{"login":"%s"}}""" , username),
             "md-user-response",
             defaultTimeout
         ) ?: "Message sent, but no response received yet. :("
@@ -43,15 +43,13 @@ class MyUserDetailsService(redisMessageService: RedisMessageService) : UserDetai
                     && userMap.contains("password") && userMap.contains("id"))){
             throw Exception("сервис БД сломался")
         }
-
-        var userPrincipal = UserPrincipal()
+        val userPrincipal = UserPrincipal()
         userPrincipal.login = username
         userPrincipal.passwrd = userMap["password"] as String
         userPrincipal.userRoles = listOf(UserRole.ROLE_STUDENT)
-        if((userMap["admin"] as Boolean))
+        if(userMap["isAdmin"] != null && (userMap["admin"] as Boolean))
                userPrincipal.userRoles = userPrincipal.userRoles.plus(UserRole.ROLE_ADMIN)
         userPrincipal.userId = userMap["id"] as Int
-
 
         return userPrincipal
     }
