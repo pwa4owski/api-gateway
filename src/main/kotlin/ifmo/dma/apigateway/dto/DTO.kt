@@ -1,5 +1,7 @@
 package ifmo.dma.apigateway.dto
 
+import jakarta.validation.constraints.NotBlank
+
 /**
  * данные для авторизации пользователя
  */
@@ -52,8 +54,11 @@ class QueueList (
  * Данные для регистрации нового пользователя
  */
 data class RegisterRequest (
+    @get:NotBlank
     val login: String,
+    @get:NotBlank
     val password: String,
+    @get:NotBlank
     val fullName: String
 )
 
@@ -71,6 +76,9 @@ data class StudentsInQueueList (
     val students: List<StudentInQueueCreds>
 )
 
+/**
+ * Предлагаю активно пользоваться этим методом для превращения любого класса выше в мап
+ */
 fun anyToMap(obj: Any): Map<String, Any> {
     val map = mutableMapOf<String, Any>()
     val fields = obj::class.java.declaredFields

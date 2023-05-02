@@ -1,6 +1,5 @@
 package ifmo.dma.apigateway.controllers
 
-import ifmo.dma.apigateway.dto.MessageDTO
 import ifmo.dma.apigateway.services.QueueService
 import ifmo.dma.apigateway.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 class ExampleController @Autowired constructor(
     val userService: UserService,
     val queueService: QueueService
-) {
+){
 
     @PostMapping("/api/hello")
     fun hello(): String {
