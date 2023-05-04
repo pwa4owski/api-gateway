@@ -1,17 +1,15 @@
 package ifmo.dma.apigateway.controllers
 
-import ifmo.dma.apigateway.dto.MessageDTO
 import ifmo.dma.apigateway.services.QueueService
-import ifmo.dma.apigateway.services.RedisMessageService
+import ifmo.dma.apigateway.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
-import java.time.Duration
 
 @RestController
 class ExampleController @Autowired constructor(
-    val redisMessageService: RedisMessageService,
-    @Autowired private val queueService: QueueService
-) {
+    val userService: UserService,
+    val queueService: QueueService
+){
 
     @PostMapping("/api/hello")
     fun hello(): String {

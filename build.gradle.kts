@@ -32,6 +32,8 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	implementation("com.networknt:json-schema-validator:1.0.80")
+	implementation("org.springframework.boot:spring-boot-starter-validation:3.0.5")
 }
 
 tasks.withType<KotlinCompile> {

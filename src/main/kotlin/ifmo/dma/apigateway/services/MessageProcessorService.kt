@@ -1,39 +1,32 @@
 package ifmo.dma.apigateway.services
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import ifmo.dma.apigateway.dto.MRequest
 import ifmo.dma.apigateway.dto.MResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.Duration
 
 @Service
 class MessageProcessorService(
     @Autowired private val redisMessageService: RedisMessageService
 ) {
 
-    private val mapper = ObjectMapper()
-    fun push(queue: String, payload: Any) {
-        redisMessageService.push(
-            queue, mapper.writeValueAsString(
-                MResponse(
-                    true,
-                    "",
-                    0,
-                    payload
-                )
-            )
-        )
-    }
+    private final val defaultTimeout: Duration = Duration.ofSeconds(100)
 
-    fun pushError(queue: String, errorMessage: String, responseCode: Int) {
-        redisMessageService.push(
-            queue, mapper.writeValueAsString(
-                MResponse(
-                    false,
-                    errorMessage,
-                    responseCode,
-                    object {}
-                )
-            )
+    private val mapper = ObjectMapper()
+
+    fun publishAndPop(command: String, payload: Map<String, Any>) : MResponse{
+        val strReposnse = redisMessageService.publishAndPop("md-user-request",
+                mapper.writeValueAsString(
+                    MRequest(
+                        command = command,
+                        payload = payload
+                    )
+                ),
+            "md-user-response",
+            timeout = defaultTimeout
         )
+        return mapper.readValue(strReposnse, MResponse::class.java)
     }
 }

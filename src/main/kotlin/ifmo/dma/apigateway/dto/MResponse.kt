@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class MResponse @JsonCreator constructor(
     @JsonProperty("successful") val successful:Boolean,
-    @JsonProperty("error_message") val errorMessage:String?,
-    @JsonProperty("response_code") val responseCode: Int,
+    @JsonProperty("responseCode") val responseCode: Int,
+    @JsonProperty("errorMessage") val errorMessage:String?,
     @JsonProperty("payload") val payload:Any?
 )
