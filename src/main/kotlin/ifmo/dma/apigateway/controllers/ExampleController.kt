@@ -5,7 +5,7 @@ import ifmo.dma.apigateway.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@RestController // нахуя нам это? Го удалим ( © Артем Артемкин )
 class ExampleController @Autowired constructor(
     val userService: UserService,
     val queueService: QueueService
