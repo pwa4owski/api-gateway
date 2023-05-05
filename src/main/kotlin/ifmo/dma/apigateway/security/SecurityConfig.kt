@@ -26,7 +26,7 @@ class SecurityConfiguration {
 
          http.httpBasic().and().csrf().disable()
             .authorizeHttpRequests()
-            .requestMatchers(HttpMethod.POST, "/users/register", "/signin", "/api/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/users/register", "/signin", "/api/**", "/users/**", "/groups/**").permitAll()
             .requestMatchers("/student/**").hasAnyRole("STUDENT", "ADMIN")
             .requestMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()

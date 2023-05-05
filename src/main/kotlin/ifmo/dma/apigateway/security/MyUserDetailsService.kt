@@ -46,6 +46,7 @@ class MyUserDetailsService @Autowired constructor(
                userPrincipal.userRoles = userPrincipal.userRoles.plus(UserRole.ROLE_ADMIN)
         userPrincipal.userId = payloadMap["id"] as Int
 
+
         return userPrincipal
     }
 
