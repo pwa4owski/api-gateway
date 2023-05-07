@@ -60,6 +60,18 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
         return response
     }
+    fun getGroup(userId: Int?): String? {
+        val request = String.format("""
+            {
+                "command": "getGroup",
+                "payload": {
+                    "userId": %s
+                }
+            }
+        """.trimIndent(), userId)
+        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
+        return response
+    }
 
 
 }

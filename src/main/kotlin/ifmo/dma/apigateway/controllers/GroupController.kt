@@ -41,4 +41,10 @@ class GroupController @Autowired constructor( @Autowired val groupService: Group
         val userId = userPrincipal.userId
         return groupService.deleteGroup(userId);
     }
+    @GetMapping("/group")
+    fun getGroup(authentication: Authentication): String? {
+        val userPrincipal: UserPrincipal = authentication.principal as UserPrincipal;
+        val userId = userPrincipal.userId
+        return groupService.getGroup(userId);
+    }
 }
