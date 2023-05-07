@@ -7,6 +7,7 @@ import ifmo.dma.apigateway.security.UserPrincipal
 import ifmo.dma.apigateway.services.GroupService
 import ifmo.dma.apigateway.services.QueuesService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
@@ -16,26 +17,26 @@ class QueuesController @Autowired constructor(@Autowired val queuesService: Queu
 
 
     @GetMapping("/group/queues")
-    fun groupAllQueues(authentication: Authentication): String? {
+    fun groupAllQueues(authentication: Authentication): ResponseEntity<String> {
         val userPrincipal: UserPrincipal = authentication.principal as UserPrincipal;
         val userId = userPrincipal.userId
         return queuesService.getAllQueues(userId);
     }
 
     @GetMapping("/group/queues/{queueId}")
-    fun groupQueues(authentication: Authentication,@PathVariable queueId: Long): String? {
+    fun groupQueues(authentication: Authentication,@PathVariable queueId: Long): ResponseEntity<String> {
         val userPrincipal: UserPrincipal = authentication.principal as UserPrincipal;
         val userId = userPrincipal.userId
         return queuesService.getQueue(userId,queueId);
     }
     @PatchMapping("/group/queues/{queueId}")
-    fun enterQueue(authentication: Authentication,@PathVariable queueId: Long): String? {
+    fun enterQueue(authentication: Authentication,@PathVariable queueId: Long): ResponseEntity<String> {
         val userPrincipal: UserPrincipal = authentication.principal as UserPrincipal;
         val userId = userPrincipal.userId
         return queuesService.enterQueue(userId,queueId);
     }
     @PatchMapping("/group/queues/{queueId}/quit")
-    fun quitQueue(authentication: Authentication,@PathVariable queueId: Long): String? {
+    fun quitQueue(authentication: Authentication,@PathVariable queueId: Long): ResponseEntity<String> {
         val userPrincipal: UserPrincipal = authentication.principal as UserPrincipal;
         val userId = userPrincipal.userId
         return queuesService.quitQueue(userId,queueId);
