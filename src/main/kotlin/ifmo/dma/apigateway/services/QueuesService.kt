@@ -101,7 +101,7 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
             }
         }
     }
-    fun createQueue(userId: Int?, queueName: String): String? {
+    fun createQueue(userId: Int?, queueName: String): ResponseEntity<String> {
         val request = String.format("""
             {
                 "command": "createQueue",
@@ -111,9 +111,20 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
                     }
             }""".trimMargin(), userId, queueName)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
-        return response;
+        val errorCode=responseService.getErrorCode(response)
+        when (errorCode) {
+            0 -> return ResponseEntity.ok(responseService.getPayload(response))
+            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
+            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
+            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
+            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
+            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            else -> {
+                return ResponseEntity.status(500).body("неизвестная ошибка")
+            }
+        }
     }
-    fun deleteQueue(userId: Int?, queueId: Long): String? {
+    fun deleteQueue(userId: Int?, queueId: Long): ResponseEntity<String> {
         val request = String.format("""
             {
                 "command": "deleteQueue",
@@ -123,7 +134,18 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
                     }
             }""".trimMargin(), userId, queueId)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
-        return response;
+        val errorCode=responseService.getErrorCode(response)
+        when (errorCode) {
+            0 -> return ResponseEntity.ok(responseService.getPayload(response))
+            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
+            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
+            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
+            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
+            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            else -> {
+                return ResponseEntity.status(500).body("неизвестная ошибка")
+            }
+        }
     }
 
 

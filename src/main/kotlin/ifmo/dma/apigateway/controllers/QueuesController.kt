@@ -43,7 +43,7 @@ class QueuesController @Autowired constructor(@Autowired val queuesService: Queu
     }
 
     @PostMapping("/group/queues")
-    fun createQueue(authentication: Authentication,@RequestBody createQueueDTO: CreateQueueDTO): String? {
+    fun createQueue(authentication: Authentication,@RequestBody createQueueDTO: CreateQueueDTO): ResponseEntity<String> {
         val userPrincipal: UserPrincipal = authentication.principal as UserPrincipal;
         val userId = userPrincipal.userId
         val queueName: String = createQueueDTO.queueName
@@ -51,7 +51,7 @@ class QueuesController @Autowired constructor(@Autowired val queuesService: Queu
     }
 
     @DeleteMapping("/group/queues/{queueId}")
-    fun deleteQueue(authentication: Authentication,@PathVariable queueId: Long): String? {
+    fun deleteQueue(authentication: Authentication,@PathVariable queueId: Long): ResponseEntity<String> {
         val userPrincipal: UserPrincipal = authentication.principal as UserPrincipal;
         val userId = userPrincipal.userId
         return queuesService.deleteQueue(userId,queueId);
