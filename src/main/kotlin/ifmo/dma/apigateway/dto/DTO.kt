@@ -12,21 +12,6 @@ data class AccountCreds (
 
 
 /**
- * queue create request
- */
-data class CreateQueueRequest (
-    val queueName: String
-)
-
-
-/**
- * creds to join existing group
- */
-data class EnterGroupRequest (
-    val groupCode: String
-)
-
-/**
  */
 data class GroupCreds (
     val groupId: Int,
