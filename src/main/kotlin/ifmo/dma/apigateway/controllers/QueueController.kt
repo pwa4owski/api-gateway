@@ -2,7 +2,6 @@ package ifmo.dma.apigateway.controllers
 
 import ifmo.dma.apigateway.dto.CreateQueueDTO
 import ifmo.dma.apigateway.security.UserPrincipal
-import ifmo.dma.apigateway.services.QueueService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.PostMapping

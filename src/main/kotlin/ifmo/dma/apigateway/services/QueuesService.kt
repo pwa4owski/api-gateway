@@ -1,96 +1,69 @@
 package ifmo.dma.apigateway.services
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.Duration
 
 @Service
-class GroupService( @Autowired private val redisMessageService: RedisMessageService,@Autowired private val responseService: ResponseService) {
-    val requestChannel = "md-group-request"
-    val responseChannel = "md-group-response"
+class QueuesService(@Autowired private val redisMessageService: RedisMessageService,
+@Autowired private val responseService: ResponseService) {
+    val requestChannel = "md-queue-request"
+    val responseChannel = "md-queue-response"
 
-    fun addUserToGroup(inviteCode: String, userId: Int?): ResponseEntity<String> {
-        val request = String.format("""{
-                "command": "enterGroup",
-                "payload": { 
-                    "userId": %s, 
-                    "inviteCode": "%s"
-                }
-            }""".trimMargin(), userId, inviteCode)
-        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10));
-        val errorCode=responseService.getErrorCode(response)
-        when (errorCode) {
-            0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
-            else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
-            }
-        }
-    }
-
-    fun deleteUserFromGroup(userId: Int?): ResponseEntity<String> {
-        val request = String.format("""{
-            "command": "quitGroup",
-            "payload": {
-                "userId": %s,
-                "id": %s
-            }
-        }""", userId, userId)
-        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10));
-        val errorCode=responseService.getErrorCode(response)
-        when (errorCode) {
-            0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
-            else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
-            }
-        }
-    }
-
-    fun createGroup(userId: Int?, groupName: String): ResponseEntity<String> {
-        print("create group service invoked")
+    fun getAllQueues(userId: Int?): ResponseEntity<String> {
         val request = String.format("""
             {
-                "command": "createGroup",
-                "payload": {
-                    "userId": %s, 
-                    "string": "%s", 
-                    "groupName": "%s"
-                    }
-            }""".trimMargin(), userId, groupName, groupName)
-        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10));
-        val errorCode=responseService.getErrorCode(response)
-        when (errorCode) {
-            0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
-            else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
-            }
-        }
-    }
-
-    fun deleteGroup(userId: Int?): ResponseEntity<String> {
-        val request = String.format("""
-            {
-                "command": "deleteGroup",
+                "command": "getAllQueues",
                 "payload": {
                     "userId": %s
                 }
             }
         """.trimIndent(), userId)
+        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
+        val errorCode=responseService.getErrorCode(response)
+        when (errorCode) {
+            0 -> return ResponseEntity.ok(responseService.getPayload(response))
+            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
+            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
+            else -> {
+                return ResponseEntity.status(500).body("неизвестная ошибка")
+            }
+    }
+    }
+    fun getQueue(userId: Int?, queueId: Long): ResponseEntity<String> {
+        val request = String.format("""
+            {
+                "command": "getQueue",
+                "payload": {
+                    "userId": %s, 
+                    "queueId": "%s"
+                    }
+            }""".trimMargin(), userId, queueId)
+        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
+        val errorCode=responseService.getErrorCode(response)
+        when (errorCode) {
+            0 -> return ResponseEntity.ok(responseService.getPayload(response))
+            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
+            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
+            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
+            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
+            else -> {
+                return ResponseEntity.status(500).body("неизвестная ошибка")
+            }
+        }
+    }
+
+    fun enterQueue(userId: Int?, queueId: Long): ResponseEntity<String> {
+        val request = String.format("""
+            {
+                "command": "enterQueue",
+                "payload": {
+                    "userId": %s, 
+                    "queueId": "%s"
+                    }
+            }""".trimMargin(), userId, queueId)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
@@ -105,15 +78,61 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
             }
         }
     }
-    fun getGroup(userId: Int?): ResponseEntity<String> {
+    fun quitQueue(userId: Int?, queueId: Long): ResponseEntity<String> {
         val request = String.format("""
             {
-                "command": "getGroup",
+                "command": "quitQueue",
                 "payload": {
-                    "userId": %s
-                }
+                    "userId": %s, 
+                    "queueId": "%s"
+                    }
+            }""".trimMargin(), userId, queueId)
+        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
+        val errorCode=responseService.getErrorCode(response)
+        when (errorCode) {
+            0 -> return ResponseEntity.ok(responseService.getPayload(response))
+            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
+            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
+            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
+            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
+            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            else -> {
+                return ResponseEntity.status(500).body("неизвестная ошибка")
             }
-        """.trimIndent(), userId)
+        }
+    }
+    fun createQueue(userId: Int?, queueName: String): ResponseEntity<String> {
+        val request = String.format("""
+            {
+                "command": "createQueue",
+                "payload": {
+                    "userId": %s, 
+                    "queueName": "%s"
+                    }
+            }""".trimMargin(), userId, queueName)
+        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
+        val errorCode=responseService.getErrorCode(response)
+        when (errorCode) {
+            0 -> return ResponseEntity.ok(responseService.getPayload(response))
+            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
+            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
+            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
+            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
+            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            else -> {
+                return ResponseEntity.status(500).body("неизвестная ошибка")
+            }
+        }
+    }
+    fun deleteQueue(userId: Int?, queueId: Long): ResponseEntity<String> {
+        val request = String.format("""
+            {
+                "command": "deleteQueue",
+                "payload": {
+                    "userId": %s, 
+                    "queueId": "%s"
+                    }
+            }""".trimMargin(), userId, queueId)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
