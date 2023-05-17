@@ -22,13 +22,11 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId уже находится в группе.")
+            3 -> return ResponseEntity.status(400).body("Группа с кодом $inviteCode не найдена.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
@@ -45,13 +43,11 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
+            3 -> return ResponseEntity.status(400).body("Пользователь $userId является админом группы.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
@@ -71,13 +67,10 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId уже находится в группе.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
@@ -95,13 +88,11 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится группе.")
+            3 -> return ResponseEntity.status(403).body("Недостаточно прав для удаления группы.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
@@ -118,13 +109,10 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }

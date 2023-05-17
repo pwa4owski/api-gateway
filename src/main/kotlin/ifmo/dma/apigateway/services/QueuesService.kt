@@ -25,10 +25,10 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
     }
     }
@@ -45,12 +45,12 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
+            3 -> return ResponseEntity.status(400).body("Очередь $queueId не найдена.")
+            4 -> return ResponseEntity.status(400).body("Недостаточно прав для получения очереди $queueId.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
@@ -68,13 +68,13 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
+            3 -> return ResponseEntity.status(404).body("Очередь $queueId не найдена.")
+            4 -> return ResponseEntity.status(400).body("Недостаточно прав для присоединения к очереди $queueId.")
+            5 -> return ResponseEntity.status(409).body("Пользователь $userId уже находится в очереди $queueId.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
@@ -91,13 +91,13 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
+            3 -> return ResponseEntity.status(404).body("Очередь $queueId не найдена.")
+            4 -> return ResponseEntity.status(404).body("Очередь $queueId не найдена в вашей группе.")
+            5 -> return ResponseEntity.status(409).body("Пользователь $userId не записан в очередь $queueId.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
@@ -114,13 +114,11 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(404).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
+            3 -> return ResponseEntity.status(400).body("Недостаточно прав на создание очереди.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
@@ -137,13 +135,12 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
         val errorCode=responseService.getErrorCode(response)
         when (errorCode) {
             0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(401).body(responseService.getErrorMessage(response))
-            2 -> return ResponseEntity.status(402).body(responseService.getErrorMessage(response))
-            3 -> return ResponseEntity.status(403).body(responseService.getErrorMessage(response))
-            4 -> return ResponseEntity.status(404).body(responseService.getErrorMessage(response))
-            5 -> return ResponseEntity.status(405).body(responseService.getErrorMessage(response))
+            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
+            3 -> return ResponseEntity.status(400).body("Недостаточно прав на удаление очереди.")
+            4 -> return ResponseEntity.status(400).body("Очередь $queueId не найдена.")
             else -> {
-                return ResponseEntity.status(500).body("неизвестная ошибка")
+                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
