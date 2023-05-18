@@ -60,8 +60,8 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
             {
                 "command": "enterQueue",
                 "payload": {
-                    "userId": %s, 
-                    "queueId": "%s"
+                    "userId": %d, 
+                    "queueId": %d
                     }
             }""".trimMargin(), userId, queueId)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
