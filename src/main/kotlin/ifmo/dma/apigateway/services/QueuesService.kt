@@ -60,8 +60,8 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
             {
                 "command": "enterQueue",
                 "payload": {
-                    "userId": %s, 
-                    "queueId": "%s"
+                    "userId": %d, 
+                    "queueId": %d
                     }
             }""".trimMargin(), userId, queueId)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
@@ -83,8 +83,8 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
             {
                 "command": "quitQueue",
                 "payload": {
-                    "userId": %s, 
-                    "queueId": "%s"
+                    "userId": %d, 
+                    "queueId": %d
                     }
             }""".trimMargin(), userId, queueId)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
@@ -102,12 +102,13 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
         }
     }
     fun createQueue(userId: Int?, queueName: String): ResponseEntity<String> {
-        val request = String.format("""
+        val request = String.format(
+            """
             {
                 "command": "createQueue",
                 "payload": {
-                    "userId": %s, 
-                    "queueName": "%s"
+                    "userId": %d, 
+                    "queueName": %d
                     }
             }""".trimMargin(), userId, queueName)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
@@ -123,12 +124,13 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
         }
     }
     fun deleteQueue(userId: Int?, queueId: Long): ResponseEntity<String> {
-        val request = String.format("""
+        val request = String.format(
+            """
             {
                 "command": "deleteQueue",
                 "payload": {
-                    "userId": %s, 
-                    "queueId": "%s"
+                    "userId": %d, 
+                    "queueId": %d
                     }
             }""".trimMargin(), userId, queueId)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))

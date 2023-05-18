@@ -14,7 +14,7 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
         val request = String.format("""{
                 "command": "enterGroup",
                 "payload": { 
-                    "userId": %s, 
+                    "userId": %d, 
                     "inviteCode": "%s"
                 }
             }""".trimMargin(), userId, inviteCode)
@@ -32,11 +32,11 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
     }
 
     fun deleteUserFromGroup(userId: Int?): ResponseEntity<String> {
-        val request = String.format("""{
+        val request = String.format(
+            """{
             "command": "quitGroup",
             "payload": {
-                "userId": %s,
-                "id": %s
+                "userId": %d
             }
         }""", userId, userId)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10));
@@ -54,12 +54,12 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
 
     fun createGroup(userId: Int?, groupName: String): ResponseEntity<String> {
         print("create group service invoked")
-        val request = String.format("""
+        val request = String.format(
+            """
             {
                 "command": "createGroup",
                 "payload": {
-                    "userId": %s, 
-                    "string": "%s", 
+                    "userId": %d, 
                     "groupName": "%s"
                     }
             }""".trimMargin(), userId, groupName, groupName)
@@ -76,11 +76,12 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
     }
 
     fun deleteGroup(userId: Int?): ResponseEntity<String> {
-        val request = String.format("""
+        val request = String.format(
+            """
             {
                 "command": "deleteGroup",
                 "payload": {
-                    "userId": %s
+                    "userId": %d
                 }
             }
         """.trimIndent(), userId)
@@ -97,11 +98,12 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
         }
     }
     fun getGroup(userId: Int?): ResponseEntity<String> {
-        val request = String.format("""
+        val request = String.format(
+            """
             {
                 "command": "getGroup",
                 "payload": {
-                    "userId": %s
+                    "userId": %d
                 }
             }
         """.trimIndent(), userId)
