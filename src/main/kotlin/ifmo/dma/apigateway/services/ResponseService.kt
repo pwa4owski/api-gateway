@@ -16,13 +16,13 @@ class ResponseService {
 
     fun getErrorCode(jsonString: String?): Int? {
         val jsonNode = objectMapper.readTree(jsonString)
-        val errorCode = jsonNode.get("error-code").asInt()
+        val errorCode = jsonNode.get("responseCode").asInt()
         return errorCode.toInt()
     }
 
     fun getErrorMessage(jsonString: String?): String? {
         val jsonNode = objectMapper.readTree(jsonString)
-        val errorCode = jsonNode.get("error-message").asInt()
+        val errorCode = jsonNode.get("errorMessage").asText()
         return errorCode.toString()
     }
 }
