@@ -17,7 +17,7 @@ class ResponseService {
     fun getErrorCode(jsonString: String?): Int? {
         val jsonNode = objectMapper.readTree(jsonString)
         val errorCode = jsonNode.get("responseCode").asInt()
-        return errorCode.toInt()
+        return errorCode
     }
 
     fun getErrorMessage(jsonString: String?): String? {

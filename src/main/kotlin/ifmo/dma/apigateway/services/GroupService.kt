@@ -62,15 +62,17 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
                     "userId": %d, 
                     "groupName": "%s"
                     }
-            }""".trimMargin(), userId, groupName, groupName)
-        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10));
-        val errorCode=responseService.getErrorCode(response)
-        when (errorCode) {
-            0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
-            2 -> return ResponseEntity.status(400).body("Пользователь $userId уже находится в группе.")
+            }""".trimMargin(), userId, groupName, groupName
+        )
+        val response =
+            redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10));
+        val errorCode = responseService.getErrorCode(response)
+        return when (errorCode) {
+            0 -> ResponseEntity.ok(responseService.getPayload(response))
+            1 -> ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> ResponseEntity.status(400).body("Пользователь $userId уже находится в группе.")
             else -> {
-                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
+                ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
@@ -84,16 +86,18 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
                     "userId": %d
                 }
             }
-        """.trimIndent(), userId)
-        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
-        val errorCode=responseService.getErrorCode(response)
-        when (errorCode) {
-            0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
-            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится группе.")
-            3 -> return ResponseEntity.status(403).body("Недостаточно прав для удаления группы.")
+        """.trimIndent(), userId
+        )
+        val response =
+            redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
+        val errorCode = responseService.getErrorCode(response)
+        return when (errorCode) {
+            0 -> ResponseEntity.ok(responseService.getPayload(response))
+            1 -> ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> ResponseEntity.status(400).body("Пользователь $userId не находится группе.")
+            3 -> ResponseEntity.status(403).body("Недостаточно прав для удаления группы.")
             else -> {
-                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
+                ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }
@@ -106,15 +110,41 @@ class GroupService( @Autowired private val redisMessageService: RedisMessageServ
                     "userId": %d
                 }
             }
-        """.trimIndent(), userId)
-        val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
-        val errorCode=responseService.getErrorCode(response)
-        when (errorCode) {
-            0 -> return ResponseEntity.ok(responseService.getPayload(response))
-            1 -> return ResponseEntity.status(400).body("Пользователь $userId не найден.")
-            2 -> return ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
+        """.trimIndent(), userId
+        )
+        val response =
+            redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
+        val errorCode = responseService.getErrorCode(response)
+        return when (errorCode) {
+            0 -> ResponseEntity.ok(responseService.getPayload(response))
+            1 -> ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
             else -> {
-                return ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
+                ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
+            }
+        }
+    }
+
+    fun getGroupList(userId: Int?): ResponseEntity<String> {
+        val request = String.format(
+            """
+            {
+                "command": "getGroupList",
+                "payload": {
+                    "userId": %d
+                }
+            }
+        """.trimIndent(), userId
+        )
+        val response =
+            redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
+        val errorCode = responseService.getErrorCode(response)
+        return when (errorCode) {
+            0 -> ResponseEntity.ok(responseService.getPayload(response))
+            1 -> ResponseEntity.status(400).body("Пользователь $userId не найден.")
+            2 -> ResponseEntity.status(400).body("Пользователь $userId не находится в группе.")
+            else -> {
+                ResponseEntity.status(500).body("Произошла неизвестная ошибка.")
             }
         }
     }

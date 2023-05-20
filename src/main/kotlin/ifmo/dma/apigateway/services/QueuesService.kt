@@ -17,7 +17,7 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
             {
                 "command": "getAllQueues",
                 "payload": {
-                    "userId": %s
+                    "userId": %d
                 }
             }
         """.trimIndent(), userId)
@@ -33,12 +33,13 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
     }
     }
     fun getQueue(userId: Int?, queueId: Long): ResponseEntity<String> {
-        val request = String.format("""
+        val request = String.format(
+            """
             {
                 "command": "getQueue",
                 "payload": {
-                    "userId": %s, 
-                    "queueId": "%s"
+                    "userId": %d, 
+                    "queueId": %d
                     }
             }""".trimMargin(), userId, queueId)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
@@ -108,7 +109,7 @@ class QueuesService(@Autowired private val redisMessageService: RedisMessageServ
                 "command": "createQueue",
                 "payload": {
                     "userId": %d, 
-                    "queueName": %d
+                    "queueName": "%s"
                     }
             }""".trimMargin(), userId, queueName)
         val response = redisMessageService.publishAndPop(requestChannel, request, responseChannel, Duration.ofSeconds(10))
